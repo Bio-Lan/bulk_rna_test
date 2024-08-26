@@ -1,0 +1,7 @@
+{
+    "AccuraCode-V1":{
+        "pattern": "C9U12",
+        "well96": "bclist96",
+        "well384": "bclist384"
+    }
+}
