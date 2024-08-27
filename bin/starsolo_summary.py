@@ -51,7 +51,6 @@ def parse_read_stats(read_stats):
 
 def well_bctonum(df, file):
     barcodes = utils.read_one_col(file)
-    
     n = 1
     data = {}
     for i in barcodes:
@@ -101,7 +100,7 @@ if __name__ == "__main__":
     df_well.to_csv(raw_count_file, sep='\t')
     df_well_valid = df_well[ (df_well['UMI']>=args.umi_cutoff) & (df_well['read']>=args.read_cutoff) & (df_well['gene']>=args.gene_cutoff) ]
     if df_well_valid.shape[0]==0:
-        df_well_valid = df_well[ (df_well['UMI']>0) & (df_well['read']>0) & (df_well['gene']>=0) ]
+        df_well_valid = df_well[ (df_well['UMI']>0) & (df_well['read']>0) & (df_well['gene']>0) ]
     df_well_valid.to_csv(marked_count_file, sep='\t')
     utils.write_json(df_well_valid.to_dict('index'), marked_count_json)
     

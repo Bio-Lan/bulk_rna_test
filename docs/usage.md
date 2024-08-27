@@ -5,31 +5,24 @@
 
 ## Samplesheet input
 
-You will need to create a samplesheet with information about the samples you would like to analyse before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row as shown in the examples below.
+You will need to create a samplesheet with information about the samples you would like to analyse before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row as shown in the examples below. An example `samplesheet.csv` can be found in the [test data repository](https://github.com/singleron-RD/bulk_rna_test_data/tree/master/AccuraCode).
 
 ```bash
 --input '[path to samplesheet file]'
 ```
 
-| Column    | Description                                                                                                                                                                            |
-| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Column    | Description |
+| --------- | ----------- |
 | `sample`  | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample. Spaces in sample names are automatically converted to underscores (`_`). |
-| `fastq_1` | Full path to FastQ file reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                                                |
-| `fastq_2` | Full path to FastQ file reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                                                |
+| `fastq_1` | Full path to FastQ file reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz". |
+| `fastq_2` | Full path to FastQ file reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz". |
 
 > [!NOTE]
 > fastq_1 and fastq_2 must be full path. Relative path are not allowed.
 
 ### Multiple runs of the same sample
 
-The `sample` identifiers have to be the same when you have re-sequenced the same sample more than once e.g. to increase sequencing depth. The pipeline will concatenate the raw reads before performing any downstream analysis. Below is an example for the same sample sequenced across 3 lanes:
-
-```csv title="samplesheet.csv"
-sample,fastq_1,fastq_2
-CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz
-CONTROL_REP1,AEG588A1_S1_L003_R1_001.fastq.gz,AEG588A1_S1_L003_R2_001.fastq.gz
-CONTROL_REP1,AEG588A1_S1_L004_R1_001.fastq.gz,AEG588A1_S1_L004_R2_001.fastq.gz
-```
+The `sample` identifiers have to be the same when you have re-sequenced the same sample more than once e.g. to increase sequencing depth. The pipeline will concatenate the raw reads before performing any downstream analysis. 
 
 ### Create `samplesheet.csv` using helper script
 
@@ -37,31 +30,17 @@ When you have many samples, manually creating `samplesheet.csv` can be tedious a
 
 ```
 pip install sccore
-manifest -m manifest.csv -f /workspaces/scrna_test_data
+manifest -m manifest.csv -f /workspaces/bulk_rna_test_data/Accuracode/fastq
 ```
 
-`-m --manifest` Path to the manifest CSV file containing prefix-sample mapping.
+Recursively search the specified folders for fastq files and (optional) matched barcode files.
 
-`-f --folders` Comma-separated paths to folders to search for fastq files.
+`-m --manifest` Path to the manifest CSV file containing mappings between fastq file prefixes and sample names. An example `manifest.csv` can be found in the [test data repository](https://github.com/singleron-RD/bulk_rna_test_data/tree/master/AccuraCode).
 
-manifest.csv
-
-```
-sample,prefix
-X,prefixX
-Y,prefixY
-```
-
-/workspaces/bulk_rna_test_data
-```
-prefixY_S1_L001_R1_001.fastq.gz  prefixY_S1_L002_R1_001.fastq.gz  prefixX_R1.fastq.gz
-prefixY_S1_L001_R2_001.fastq.gz  prefixY_S1_L002_R2_001.fastq.gz  prefixX_R2.fastq.gz
-```
+`-f --folders` Comma-separated paths to folders to search for fastq files. If `--match` is used, all `barcode.tsv.gz` files with sample name in the full path will also be searched.
 
 
 ## Running the pipeline
-### pipeline: `Accuracode`
-> Accuracode sequencing analysis pipeline.
 
 The typical command for running the pipeline is as follows:
 
@@ -88,9 +67,6 @@ If you wish to repeatedly use the same parameters for multiple runs, rather than
 
 Pipeline settings can be provided in a `yaml` or `json` file via `-params-file <file>`.
 
-> [!WARNING]
-> Do not use `-c <file>` to specify parameters as this will result in errors. Custom config files specified with `-c` must only be used for [tuning process resource specifications](https://nf-co.re/docs/usage/configuration#tuning-workflow-resources), other infrastructural tweaks (such as output directories), or module arguments (args).
-
 The above pipeline run specified with a params file in yaml format:
 
 ```bash
@@ -113,10 +89,9 @@ pip install nf-core
 nf-core launch singleron-RD/bulk_rna
 ```
 
-### pipeline: `split_fastq`
-> Split fastq by well information.
+### Pipeline-Split fastq
 
-The typical command for running the pipeline is as follows:
+Split fastq by well information.
 
 ```bash
 nextflow run singleron-RD/bulk_rna \
@@ -126,21 +101,22 @@ nextflow run singleron-RD/bulk_rna \
  --split_inf 'path_to_split_information_file' \
  -profile docker
 ```
-Optional: 
-``--split_to_well `True` ``
-split fastq to well level.
+Optional:  
+``--split_to_well `true` ``  
+split fastq to well level.output: {sub_sample}/{well}_R(1/2).fastq
 
 `split_inf` input file:  
 It mus be full path of the file. The file has to be a tab-delimited file with 3 columns, and a header row as shown below.
 
-| Column | Description |
-| ------ | ----------- |
-| raw_sample | It must be the same as sample name in column `sample` of samplesheet. |
-| well | If read barcode belongs to these wells, the read will be output into the same sub-fastq. |
-| sub_sample | Custom sample name.It will be the prefix of the sub-fastq. |
+| Column     | Description                                                                              |
+| ---------- | ---------------------------------------------------------------------------------------- |
+| raw_sample | It must be the same as sample name in column `sample` of samplesheet.                    |
+| well       | If read barcode belongs to these wells, the read will be output into the same sub-fastq. |
+| sub_sample | Custom sample name.It will be the prefix of the sub-fastq.                               |
+
 > [!NOTE]
-> raw_sample must be the same as sample in the samplesheet.  
-> well only allowed `,` and `-`.Same well in different row are not allowed.
+> raw_sample must be the same as `sample` in the samplesheet.  
+> well only allowed `,` and `-`. Same well in different row are not allowed.
 
 This will launch the pipeline with the `docker` configuration profile. See below for more information about profiles.
 
@@ -181,6 +157,9 @@ Run the following command to test
 nextflow run singleron-RD/bulk_rna -profile test,docker --outdir results
 ```
 
+> [!NOTE]
+> This command might fail if you have [trouble connecting to raw.githubusercontent.com](https://github.com/openvinotoolkit/openvino/issues/8492).
+
 ### Updating the pipeline
 
 When you run the above command, Nextflow automatically pulls the pipeline code from GitHub and stores it as a cached version. When running the pipeline after this, it will always use the cached version if available - even if the pipeline has been updated since. To make sure that you're running the latest version of the pipeline, make sure that you regularly update the cached version of the pipeline:
@@ -188,6 +167,13 @@ When you run the above command, Nextflow automatically pulls the pipeline code f
 ```bash
 nextflow pull singleron-RD/bulk_rna
 ```
+
+> [!NOTE]
+> This command might fail if you have trouble connecting to github. In this case, you can manually git clone the master branch and run with the path to the folder.
+> ```
+> git clone https://github.com/singleron-RD/scrna.git
+> nextflow run /workspace/pipeline/scrna ...
+> ```
 
 ### Reproducibility
 

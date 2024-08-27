@@ -1,20 +1,20 @@
 # singleron-RD/bulk_rna pipeline parameters
 
-AccuraCode sequencing data nextflow pipeline
+Processing AccuraCode sequencing data
 
 ## Input/output options
 Define where the pipeline should find input data and save output data.
 | Parameter | Description | Type | Default | Required | Hidden |
-|-----------|-----------|-----------|-----------|-----------|-----------|
-| `input` | Path to comma-separated file containing information about the samples in the experiment. <details><summary>Help</summary><small>You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row.</small></details>| `string` |  | True |  |
+|-----------|-------------|------|---------|----------|--------|
+| `input` | Path to comma-separated file containing information about the samples in the experiment. <details><summary>Help</summary><small>You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row.</small></details> | `string` |  | True |  |
 | `outdir` | The output directory where the results will be saved. You have to use absolute paths to storage on Cloud infrastructure. | `string` |  | True |  |
-| `email` | Email address for completion summary. <details><summary>Help</summary><small>Set this parameter to your e-mail address to get a summary e-mail with details of the run sent to you when the workflow exits. If set in your user config file (`~/.nextflow/config`) then you don't need to specify this on the command line for every run.</small></details>| `string` |  |  |  |
+| `email` | Email address for completion summary. <details><summary>Help</summary><small>Set this parameter to your e-mail address to get a summary e-mail with details of the run sent to you when the workflow exits. If set in your user config file (`~/.nextflow/config`) then you don't need to specify this on the command line for every run.</small></details> | `string` |  |  |  |
 | `multiqc_title` | MultiQC report title. Printed as page header, used for filename if not otherwise specified. | `string` |  |  |  |
 
-## Genome
+## Genome options
 Genome files and parameters.
 | Parameter | Description | Type | Default | Required | Hidden |
-|-----------|-----------|-----------|-----------|-----------|-----------|
+|-----------|-------------|------|---------|----------|--------|
 | `fasta` | Path to genome fasta. | `string` |  |  |  |
 | `gtf` | Path to genome gtf. | `string` |  |  |  |
 | `star_genome` | Path to STAR genome directory. Required if fasta and gtf are not provided. | `string` |  |  |  |
@@ -24,41 +24,41 @@ Genome files and parameters.
 
 ## Protocol options
 | Parameter | Description | Type | Default | Required | Hidden |
-|-----------|-----------|-----------|-----------|-----------|-----------|
-| `protocol` | Predefined pattern and whitelist.If set to "customized", --pattern and --whitelist are required.| `string` | bulk_rna |  |  |
-| `well` | The AccuraCode wells used (384 or 96).| `integer` | 384 |  |  |
-| `pattern` | A string to locate cell barcode and UMI in R1 read. For example "C9L16U12". <details><summary>Help</summary><small>C: cell barcode<br>L: Linker sequence between segments<br>U: UMI<br>T: poly T</small></details>| `string` |  |  |  |
+|-----------|-------------|------|---------|----------|--------|
+| `protocol` | Predefined pattern and whitelist.If set to "customized", --pattern and --whitelist are required. | `string` | AccuraCode-V1 |  |  |
+| `well` | The AccuraCode wells used (384 or 96). | `integer` | 384 |  |  |
+| `pattern` | A string to locate cell barcode and UMI in R1 read. For example "C9L16U12". <details><summary>Help</summary><small>C: cell barcode<br>L: Linker sequence between segments<br>U: UMI<br>T: poly T</small></details> | `string` |  |  |  |
 | `whitelist` | Barcode whitelist files. Multiple whitelists are seperated by whitespace. | `string` |  |  |  |
 
 ## STARSolo options
 | Parameter | Description | Type | Default | Required | Hidden |
-|-----------|-----------|-----------|-----------|-----------|-----------|
-| `soloFeatures` | Quantification of different transcriptomic features. <details><summary>Help</summary><small>https://github.com/alexdobin/STAR/issues/1460  <br>--soloFeatures SJ quantifies splice junctions by calculating per-cell counts ofreads that are spliced across junctions. It will count spliced reads across annotatedand unannotated junctions, thus allowing analysis of inter-cell alternative splicing and detection of novel splice isoforms.  <br>--soloFeatures Velocyto performs separate counting for spliced, unsplicedand ambiguous reads, similar to the Velocyto tool . Its output can be usedin the RNA-velocity analyses to dissect the transcriptional dynamics of the cells.  </small></details>| `string` | GeneFull_Ex50pAS |  |  |
+|-----------|-------------|------|---------|----------|--------|
+| `soloFeatures` | Quantification of different transcriptomic features. <details><summary>Help</summary><small>https://github.com/alexdobin/STAR/issues/1460  </small></details> | `string` | GeneFull_Ex50pAS |  |  |
 | `soloCellFilter` | Cell-calling method. <details><summary>Help</summary><small>https://github.com/alexdobin/STAR/blob/master/docs/STARsolo.md#cell-filtering-calling</small></details>| `string` | None |  |  |
 | `outFilterMatchNmin` | Alignment will be output only if the number of matched bases is higher than or equal to this value. <details><summary>Help</summary><small>Use default 50 to filter potential short prime sequences.</small></details>| `integer` | 50 |  |  |
 | `outSAMattributes` | Output tags in SAM/BAM. <details><summary>Help</summary><small>https://github.com/alexdobin/STAR/blob/master/docs/STARsolo.md#bam-tags</small></details>| `string` | NH HI nM AS CR UR CB UB GX GN sF |  |  |
 | `outReadsUnmapped` |  output of unmapped and partially mapped (i.e. mapped only one mate of a paired end read) reads in separate file(s).(None or Fastx)| `string` | None |  |  |
 | `starsolo_extra_args` | Extra STARSolo arguments to use. | `string` | --clip3pAdapterSeq AAAAAAAAAAAA --outSAMtype BAM SortedByCoordinate |  |  |
 
-## Well filter
+## Well filter options
 If well exceeds the threshold, it is considered a valid well and reported.
-| Parameter | Type | Default | Required | Hidden |
-|-----------|-----------|-----------|-----------|-----------|
-| `umi_cutoff` | `integer` | 500 |  |  |
-| `read_cutoff` | `integer` | 0 |  |  |
-| `gene_cutoff` | `integer` | 0 |  |  |
+| Parameter | Description | Type | Default | Required | Hidden |
+|-----------|-------------|------|---------|----------|--------|
+| `umi_cutoff` | If the UMI number exceeds the threshold, it is considered a valid well and reported. | `integer` | 500 |  |  |
+| `read_cutoff` | If the read number exceeds the threshold, it is considered a valid well and reported. | `integer` | 0 |  |  |
+| `gene_cutoff` | If the gene number exceeds the threshold, it is considered a valid well and reported. | `integer` | 0 |  |  |
 
 ## Optional modules
 | Parameter | Description | Type | Default | Required | Hidden |
-|-----------|-----------|-----------|-----------|-----------|-----------|
+|-----------|-------------|------|---------|----------|--------|
 | `run_fastqc` | FastQC of raw reads. | `boolean` | false |  |  |
 
 ## Optional workflow
 Split fastq based on the well provided.
 | Parameter | Description | Type | Default | Required | Hidden |
-|-----------|-----------|-----------|-----------|-----------|-----------|
+|-----------|-------------|------|---------|----------|--------|
 | `run_splitfastq` | Split fastq based on information provided by the user. | `boolean` | false |  |  |
-| `split_inf` | The file tell which well belong to sub-sample. <details><summary>Help</summary><small>header: raw_sample\twell\tsub_sample<br>sampleX\t1-3,4,5\tsub_X<br>sampleX\t10-16\tsub_Y<br>raw_sample is the same as sample in the samplesheet.</small></details>| `string` |  |  |  |
+| `split_inf` | The file tell which well belong to sub-sample. <details><summary>Help</summary><small> header:<br> raw_sample\twell\tsub_sample<br> sampleX\t1-3,4,5\tsub_X<br> sampleX\t10-16\tsub_Y<br> raw_sample is the same as `sample` in the samplesheet.</small></details> | `string` |  |  |  |
 | `split_to_well` | Split fastq into well level. | `string` |  |  |  |
 
 > [!NOTE]
@@ -67,7 +67,7 @@ Split fastq based on the well provided.
 ## Max job request options
 Set the top limit for requested resources for any single job.
 | Parameter | Description | Type | Default | Required | Hidden |
-|-----------|-----------|-----------|-----------|-----------|-----------|
+|-----------|-------------|------|---------|----------|--------|
 | `max_cpus` | Maximum number of CPUs that can be requested for any single job. <details><summary>Help</summary><small>Use to set an upper-limit for the CPU requirement for each process. Should be an integer e.g. `--max_cpus 1`</small></details>| `integer` | 16 |  | True |
 | `max_memory` | Maximum amount of memory that can be requested for any single job. <details><summary>Help</summary><small>Use to set an upper-limit for the memory requirement for each process. Should be a string in the format integer-unit e.g. `--max_memory '8.GB'`</small></details>| `string` | 128.GB |  | True |
 | `max_time` | Maximum amount of time that can be requested for any single job. <details><summary>Help</summary><small>Use to set an upper-limit for the time requirement for each process. Should be a string in the format integer-unit e.g. `--max_time '2.h'`</small></details>| `string` | 240.h |  | True |
@@ -75,7 +75,7 @@ Set the top limit for requested resources for any single job.
 ## Institutional config options
 Parameters used to describe centralised config profiles. These should not be edited.
 | Parameter | Description | Type | Default | Required | Hidden |
-|-----------|-----------|-----------|-----------|-----------|-----------|
+|-----------|-------------|------|---------|----------|--------|
 | `custom_config_version` | Git commit id for Institutional configs. | `string` | master |  | True |
 | `custom_config_base` | Base directory for Institutional configs. <details><summary>Help</summary><small>If you're running offline, Nextflow will not be able to fetch the institutional config files from the internet. If you don't need them, then this is not a problem. If you do need them, you should download the files from the repo and tell Nextflow where to find them with this parameter.</small></details>| `string` |  |  | True |
 | `config_profile_name` | Institutional config name. | `string` |  |  | True |
@@ -86,7 +86,7 @@ Parameters used to describe centralised config profiles. These should not be edi
 ## Generic options
 Less common options for the pipeline, typically set in a config file.
 | Parameter | Description | Type | Default | Required | Hidden |
-|-----------|-----------|-----------|-----------|-----------|-----------|
+|-----------|-------------|------|---------|----------|--------|
 | `help` | Display help text. | `boolean` |  |  | True |
 | `version` | Display version and exit. | `boolean` |  |  | True |
 | `publish_dir_mode` | Method used to save pipeline results to output directory. <details><summary>Help</summary><small>The Nextflow `publishDir` option specifies which intermediate files should be saved to the output directory. This option tells the pipeline what method should be used to move these files. See [Nextflow docs](https://www.nextflow.io/docs/latest/process.html#publishdir) for details.</small></details>| `string` | copy |  | True |
