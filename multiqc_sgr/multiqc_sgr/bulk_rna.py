@@ -23,7 +23,7 @@ class MultiqcModule(BaseMultiqcModule):
         if all(len(x) == 0 for x in [stat_data,well_data]):
             raise ModuleNoSamplesFound
         
-        sample_list = list[stat_data.keys()]
+        sample_list = list(stat_data.keys())
         sample_list.sort()
         # Basic Stats Table
         self.general_stats_table(stat_data)
