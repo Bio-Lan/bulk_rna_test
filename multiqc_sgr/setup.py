@@ -12,7 +12,7 @@ setup(
     license="MIT",
     packages=find_packages(),
     include_package_data=True,
-    install_requires=["multiqc==1.21"],
+    install_requires=["multiqc==1.24.1"],
     entry_points={
         "multiqc.modules.v1": [
             "bulk_rna = multiqc_sgr.bulk_rna:MultiqcModule",
