@@ -43,7 +43,7 @@
                 }
             }
         }, 
-        "genome": {
+        "genome_options": {
             "title": "Genome",
             "type": "object",
             "description": "Genome files and parameters.",
@@ -149,12 +149,12 @@
                 },
                 "starsolo_extra_args": {
                     "type": "string",
-                    "default": "--clip3pAdapterSeq AAAAAAAAAAAA --outSAMtype BAM SortedByCoordinate",
+                    "default": "--clip3pAdapterSeq AAAAAAAAAAAA --outSAMtype BAM SortedByCoordinate --soloStrand Forward",
                     "description": "Extra STARSolo arguments to use."
                 }
             }
         },
-        "well_option": {
+        "well_options": {
             "title": "well filter options",
             "type": "object",
             "description": "params to filter well",
@@ -189,7 +189,7 @@
                 }
             }
         },
-        "fastq_split":{
+        "fastq_split_options":{
             "title": "FASTQ split options",
             "type": "object",
             "description": "",
@@ -415,12 +415,12 @@
     },
     "allOf": [
         {"$ref": "#/definitions/input_output_options"},
-        {"$ref": "#/definitions/genome"},
+        {"$ref": "#/definitions/genome_options"},
         {"$ref": "#/definitions/protocol_options"},
         {"$ref": "#/definitions/starsolo_options"},
-        {"$ref": "#/definitions/well_option"},
+        {"$ref": "#/definitions/well_options"},
         {"$ref": "#/definitions/optional_modules"},
-        {"$ref": "#/definitions/fastq_split"},
+        {"$ref": "#/definitions/fastq_split_options"},
         {"$ref": "#/definitions/max_job_request_options"},
         {"$ref": "#/definitions/institutional_config_options"},
         {"$ref": "#/definitions/generic_options"}

@@ -38,7 +38,7 @@ Genome files and parameters.
 | `outFilterMatchNmin` | Alignment will be output only if the number of matched bases is higher than or equal to this value. <details><summary>Help</summary><small>Use default 50 to filter potential short prime sequences.</small></details>| `integer` | 50 |  |  |
 | `outSAMattributes` | Output tags in SAM/BAM. <details><summary>Help</summary><small>https://github.com/alexdobin/STAR/blob/master/docs/STARsolo.md#bam-tags</small></details>| `string` | NH HI nM AS CR UR CB UB GX GN sF |  |  |
 | `outReadsUnmapped` |  output of unmapped and partially mapped (i.e. mapped only one mate of a paired end read) reads in separate file(s).(None or Fastx)| `string` | None |  |  |
-| `starsolo_extra_args` | Extra STARSolo arguments to use. | `string` | --clip3pAdapterSeq AAAAAAAAAAAA --outSAMtype BAM SortedByCoordinate |  |  |
+| `starsolo_extra_args` | Extra STARSolo arguments to use. | `string` | --clip3pAdapterSeq AAAAAAAAAAAA --outSAMtype BAM SortedByCoordinate --soloStrand Forward |  |  |
 
 ## Well filter options
 If well exceeds the threshold, it is considered a valid well and reported.
