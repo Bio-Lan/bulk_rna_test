@@ -8,7 +8,7 @@ process split_fastq {
     label 'process_medium'
 
     conda 'conda-forge::pandas==2.2.1 bioconda::pysam==0.22.1 conda-forge::xopen==2.0.1'
-    container "biocontainers/pandas:2.2.1 biocontainers/pysam:0.22.1--py38h15b938a_0 biocontainers/xopen:2.0.1"
+    container "qaqlans/sgrdocker_accura_tools1"
     
     input:
     tuple val(meta), path(reads)
