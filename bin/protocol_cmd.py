@@ -28,7 +28,9 @@ class Starsolo:
             protocol = args.protocol
             protocol_dict = parse_protocol.get_protocol_dict(args.assets_dir)
             if protocol == 'AccuraCode-V1':
-                if args.well == 96:
+                if args.whitelist:
+                    whitelist_str = args.whitelist
+                elif args.well == 96:
                     whitelist_str = protocol_dict[protocol].get("well96", [])
                 else:
                     whitelist_str = protocol_dict[protocol].get("well384", [])
