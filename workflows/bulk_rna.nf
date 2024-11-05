@@ -41,6 +41,8 @@ workflow BULK_RNA {
 
     // STAR genome
     def star_genome = null
+    genome_name = null
+    genome_dir = "${workDir}/temp_dir/genome"
     if (params.star_genome) {
         star_genome = params.star_genome
     } else {
@@ -48,11 +50,21 @@ workflow BULK_RNA {
             params.gtf,
             params.keep_attributes
         )
+        
         ch_gtf = FILTER_GTF.out.filtered_gtf
+        if(params.genome_name.contains('/')){
+            genome_name = params.genome_name.split('/').last()
+            genome_dir = params.genome_name
+            genome_dir = genome_dir.replaceAll(genome_name+'$', "")
+        }else{
+            genome_name = params.genome_name
+        }
+
         STAR_GENOME(
             params.fasta,
             ch_gtf,
-            params.genome_name
+            genome_name,
+            genome_dir
         )
         ch_versions = ch_versions.mix(STAR_GENOME.out.versions.first())
         star_genome = STAR_GENOME.out.index

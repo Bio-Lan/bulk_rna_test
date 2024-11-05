@@ -1,6 +1,7 @@
 process STAR_GENOME {
     tag "$genome_name"
     label 'process_medium'
+    publishDir "$genome_dir", mode: 'copy', enabled: params.genome_name.contains('/')
 
     conda "bioconda::star==2.7.11b"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
@@ -11,7 +12,8 @@ process STAR_GENOME {
     path fasta
     path gtf
     val genome_name
-
+    val genome_dir
+    
     output:
     path "$genome_name"            , emit: index
     path "versions.yml"            , emit: versions
