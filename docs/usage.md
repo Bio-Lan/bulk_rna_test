@@ -103,20 +103,16 @@ nextflow run singleron-RD/bulk_rna \
 ```
 Optional:  
 ``--split_to_well `true` ``  
-split fastq to well level.output: {sub_sample}/{well}_R(1/2).fastq
+split fastq to well level.output: {sub_sample}/{wellBC}_R(1/2).fastq
 
-`split_inf` input file:  
-It mus be full path of the file. The file has to be a tab-delimited file with 3 columns, and a header row as shown below.
+`--split_inf` input file:
+It mus be full path of the file. The file has to be a comma-separated file with 3 columns, and a header row as shown below.
 
-| Column     | Description                                                                              |
-| ---------- | ---------------------------------------------------------------------------------------- |
-| raw_sample | It must be the same as sample name in column `sample` of samplesheet.                    |
-| well       | If read barcode belongs to these wells, the read will be output into the same sub-fastq. |
-| sub_sample | Custom sample name.It will be the prefix of the sub-fastq.                               |
-
-> [!NOTE]
-> raw_sample must be the same as `sample` in the samplesheet.  
-> well only allowed `,` and `-`. Same well in different row are not allowed.
+| Column     | Description                                                                 |
+| ---------- | --------------------------------------------------------------------------- |
+| sample     | It must be the same as sample name in column `sample` of samplesheet.       |
+| sub_sample | Custom sample name.It will be the prefix of the sub-fastq.                  |
+| wellBC     | It mus be full path of the BC file.The format is one well barcode per line. |
 
 This will launch the pipeline with the `docker` configuration profile. See below for more information about profiles.
 

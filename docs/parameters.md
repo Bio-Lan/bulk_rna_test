@@ -58,7 +58,7 @@ Split fastq based on the well provided.
 | Parameter | Description | Type | Default | Required | Hidden |
 |-----------|-------------|------|---------|----------|--------|
 | `run_splitfastq` | Split fastq based on information provided by the user. | `boolean` | false |  |  |
-| `split_inf` | The file tell which well belong to sub-sample. <details><summary>Help</summary><small> header:<br> raw_sample\twell\tsub_sample<br> sampleX\t1-3,4,5\tsub_X<br> sampleX\t10-16\tsub_Y<br> raw_sample is the same as `sample` in the samplesheet.</small></details> | `string` |  |  |  |
+| `split_inf` | The split information file.It mus be full path of the file.<details><summary>Help</summary><small> The file has to be a comma-separated file with 3 columns, and a header row like:<br>`sample,sub_sample,wellBC`<br>`sample` is the same as `sample` in the samplesheet.<br> `sub_sample` is the prefix of fastq. <br> `wellBC` is the full path of bc file. The format is one wellbc per line. </small></details>| `string` |  |  |  |
 | `split_to_well` | Split fastq into well level. | `string` |  |  |  |
 
 > [!NOTE]
