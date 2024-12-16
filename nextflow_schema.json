@@ -203,11 +203,11 @@
                     "type": "string",
                     "format": "file-path",
                     "description": "Split information.The file tell which well belong to sub-sample.It must be full path.",
-                    "help_text": "header：raw_sample\twell\tsub_sample.raw_sample is the same as sample in the samplesheet. well like: 1-3,4,5. Only allowed ',' and '-'."
+                    "help_text": "header：'sample,sub_sample,wellBC'.`sample` is the same as sample in the samplesheet. `sub_sample` is the prefix of fastq. `wellBC` is the full path of well BC file, one wellBC per line."
                 },
                 "split_to_well": {
                     "type": "string",
-                    "description": "If true,split fastq into the well level. output: {sub_sample}/{well}_R(1/2).fastq"
+                    "description": "If true,split fastq into the well level. output: {sub_sample}/well/{wellBC}_R(1/2).fastq"
                 }
             }
         },
