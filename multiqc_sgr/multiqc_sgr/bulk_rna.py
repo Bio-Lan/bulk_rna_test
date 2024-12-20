@@ -3,7 +3,7 @@ import logging
 from collections import defaultdict
 
 from multiqc.base_module import BaseMultiqcModule, ModuleNoSamplesFound
-from multiqc.plots import table
+from multiqc.plots import table, linegraph
 
 # Initialise the logger
 log = logging.getLogger("multiqc")
@@ -20,7 +20,8 @@ class MultiqcModule(BaseMultiqcModule):
         
         stat_data = self.parse_json(ASSAY, "stats")
         well_data = self.parse_json(ASSAY, "well_count")
-        if all(len(x) == 0 for x in [stat_data,well_data]):
+        median_gene_data = self.parse_json(ASSAY, "median_gene")
+        if all(len(x) == 0 for x in [stat_data,well_data,median_gene_data]):
             raise ModuleNoSamplesFound
         
         sample_list = list(stat_data.keys())
@@ -30,12 +31,23 @@ class MultiqcModule(BaseMultiqcModule):
 
         # well detail
         helptext = """
-        The rowname of the table is the well barcode sequence number. Only output wells that meet the conditions(default: UMI>=500).  
+        The rowname of the table is the well barcode sequence. Only output wells that meet the conditions(default: UMI>=500).  
         If no well pass the filter,output wells that UMI,read and gene > 0.
         """
-        for sample in sample_list:
-            self.add_section(name = f"{sample} - per well", anchor = f'{sample}_well_table',helptext=helptext,plot = self.well_table(well_data[sample],sample))
+        
+        self.add_section(
+            name = "Median Gene", 
+            anchor = "median_gene", 
+            plot = self.median_gene_plot(median_gene_data)
+        )
 
+        for sample in sample_list:
+            self.add_section(
+                name = f"{sample} - per well", 
+                anchor = f'{sample}_well_table',
+                helptext=helptext,
+                plot = self.well_table(well_data[sample],sample)
+            )
         # Superfluous function call to confirm that it is used in this module
         # Replace None with actual version if it is available
         
@@ -229,3 +241,14 @@ class MultiqcModule(BaseMultiqcModule):
             },
         }
         return table.plot(well_data,pconfig=table_config,headers=headers)
+
+    def median_gene_plot(self, median_gene_data):
+        # Config for the plot
+        pconfig = {
+            "id": "median_gene_plot",
+            "title": "bulk_rna: Median Gene",
+            "ylab": "Median Gene",
+            "xlab": "Percent of Reads",
+            "height": 750,
+        }
+        return linegraph.plot(median_gene_data, pconfig)

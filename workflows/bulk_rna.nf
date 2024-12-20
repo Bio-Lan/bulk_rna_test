@@ -88,14 +88,9 @@ workflow BULK_RNA {
     ch_versions = ch_versions.mix(STARSOLO.out.versions.first())
 
     // statsolo summary
-    ch_merge = STARSOLO.out.read_stats.join(STARSOLO.out.summary)
+    ch_merge = STARSOLO.out.read_stats.join(STARSOLO.out.summary).join(STARSOLO.out.bam_sorted)
     STARSOLO_SUMMARY (
-        ch_merge,
-        "${projectDir}/assets/",
-        params.protocol,
-        params.umi_cutoff,
-        params.read_cutoff,
-        params.gene_cutoff,
+        ch_merge
     )
     ch_multiqc_files = ch_multiqc_files.mix(STARSOLO_SUMMARY.out.json.collect{it[1]})
 
